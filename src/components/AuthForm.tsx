@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { LoginCredentials, SignupCredentials } from '../types/auth';
+import { LoginCredentials, SignupCredentials, AuthFormData } from '../types/auth';
 
 // Custom regex for Indian mobile numbers (10 digits starting with 6-9)
 const INDIAN_MOBILE_REGEX = /^[6-9]\d{9}$/;
@@ -51,12 +51,16 @@ type LoginForm = z.infer<typeof loginSchema>;
 type SignupForm = z.infer<typeof signupSchema>;
 
 interface AuthFormProps {
-  mode: 'login' | 'signup';
-  onSubmit: (data: LoginCredentials | SignupCredentials) => Promise<void>;
+  type: 'login' | 'signup';
+  onSubmit: (data: any) => Promise<void>;
   error?: string;
 }
 
-export default function AuthForm({ mode, onSubmit, error }: AuthFormProps) {
+type FormFields = LoginForm & SignupForm;
+
+type InputId = keyof FormFields;
+
+export default function AuthForm({ type, onSubmit, error }: AuthFormProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -65,18 +69,18 @@ export default function AuthForm({ mode, onSubmit, error }: AuthFormProps) {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
-    resolver: zodResolver(mode === 'login' ? loginSchema : signupSchema),
-    mode: 'onBlur', // Validate on blur
-    defaultValues: mode === 'login' 
+  } = useForm<FormFields>({
+    resolver: zodResolver(type === 'login' ? loginSchema : signupSchema),
+    mode: 'onBlur',
+    defaultValues: type === 'login' 
       ? { identifier: '', password: '' }
       : { name: '', email: '', mobile: '', password: '', confirmPassword: '' },
   });
 
-  const handleFormSubmit = async (data: LoginForm | SignupForm) => {
+  const handleFormSubmit = async (formData: any) => {
     setIsSubmitting(true);
     try {
-      await onSubmit(data);
+      await onSubmit(formData);
     } catch (error) {
       console.error('Auth error:', error);
     } finally {
@@ -85,7 +89,7 @@ export default function AuthForm({ mode, onSubmit, error }: AuthFormProps) {
   };
 
   const renderInput = (
-    id: string,
+    id: InputId,
     label: string,
     type: string,
     placeholder?: string,
@@ -94,7 +98,7 @@ export default function AuthForm({ mode, onSubmit, error }: AuthFormProps) {
     onToggle?: () => void
   ) => (
     <div>
-      <label htmlFor={id} className="block text-sm font-medium text-sand-700">
+      <label htmlFor={id} className="block text-sm font-medium text-gray-700">
         {label}
       </label>
       <div className="relative mt-1">
@@ -104,10 +108,10 @@ export default function AuthForm({ mode, onSubmit, error }: AuthFormProps) {
           placeholder={placeholder}
           {...register(id)}
           className={`block w-full px-3 py-2 bg-white border rounded-md shadow-sm
-            placeholder:text-sand-400 
+            placeholder:text-gray-400 
             ${errors[id] 
               ? 'border-red-300 focus:border-red-500 focus:ring-red-500' 
-              : 'border-sand-300 focus:border-primary-500 focus:ring-primary-500'
+              : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'
             }
             focus:outline-none focus:ring-2`}
         />
@@ -118,16 +122,16 @@ export default function AuthForm({ mode, onSubmit, error }: AuthFormProps) {
             className="absolute inset-y-0 right-0 flex items-center pr-3"
           >
             {isShown ? (
-              <EyeOff className="w-5 h-5 text-sand-400" />
+              <EyeOff className="w-5 h-5 text-gray-400" />
             ) : (
-              <Eye className="w-5 h-5 text-sand-400" />
+              <Eye className="w-5 h-5 text-gray-400" />
             )}
           </button>
         )}
       </div>
       {errors[id] && (
         <p className="mt-1 text-sm text-red-600" role="alert">
-          {errors[id]?.message as string}
+          {errors[id]?.message}
         </p>
       )}
     </div>
@@ -135,11 +139,11 @@ export default function AuthForm({ mode, onSubmit, error }: AuthFormProps) {
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4" noValidate>
-      {mode === 'signup' && (
+      {type === 'signup' && (
         renderInput('name', 'Full Name', 'text', 'Enter your full name')
       )}
 
-      {mode === 'signup' ? (
+      {type === 'signup' ? (
         <>
           {renderInput('email', 'Email Address', 'email', 'Enter your email')}
           {renderInput('mobile', 'Mobile Number', 'tel', '10-digit mobile number')}
@@ -152,13 +156,13 @@ export default function AuthForm({ mode, onSubmit, error }: AuthFormProps) {
         'password',
         'Password',
         'password',
-        mode === 'signup' ? 'Create a strong password' : 'Enter your password',
+        type === 'signup' ? 'Create a strong password' : 'Enter your password',
         true,
         showPassword,
         () => setShowPassword(!showPassword)
       )}
 
-      {mode === 'signup' && (
+      {type === 'signup' && (
         renderInput(
           'confirmPassword',
           'Confirm Password',
@@ -170,46 +174,40 @@ export default function AuthForm({ mode, onSubmit, error }: AuthFormProps) {
         )
       )}
 
-      {error && (
-        <div className="rounded-md bg-red-50 p-4">
-          <p className="text-sm text-red-700">{error}</p>
-        </div>
-      )}
-
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full btn-primary"
+        className="w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
       >
         {isSubmitting ? (
           <Loader2 className="w-5 h-5 animate-spin mx-auto" />
-        ) : mode === 'login' ? (
+        ) : type === 'login' ? (
           'Sign In'
         ) : (
           'Sign Up'
         )}
       </button>
 
-      <p className="text-sm text-sand-600 text-center">
-        {mode === 'login' ? (
+      <p className="text-sm text-gray-600 text-center">
+        {type === 'login' ? (
           <>
             Don't have an account?{' '}
-            <Link to="/signup" className="text-primary-600 hover:text-primary-500">
+            <Link to="/signup" className="text-blue-600 hover:text-blue-500">
               Sign up
             </Link>
           </>
         ) : (
           <>
             Already have an account?{' '}
-            <Link to="/login" className="text-primary-600 hover:text-primary-500">
+            <Link to="/login" className="text-blue-600 hover:text-blue-500">
               Sign in
             </Link>
           </>
         )}
       </p>
 
-      {mode === 'signup' && (
-        <div className="text-xs text-sand-500 mt-4">
+      {type === 'signup' && (
+        <div className="text-xs text-gray-500 mt-4">
           <p className="mb-1">Password must contain:</p>
           <ul className="list-disc pl-4 space-y-1">
             <li>At least 8 characters</li>

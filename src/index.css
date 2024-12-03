@@ -3,109 +3,139 @@
 @tailwind utilities;
 
 :root {
-  font-family: Inter, system-ui, -apple-system, sans-serif;
-  --sat: env(safe-area-inset-top);
-  --sab: env(safe-area-inset-bottom);
-  --sal: env(safe-area-inset-left);
-  --sar: env(safe-area-inset-right);
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --shadow-color: 0deg 0% 0%;
 }
 
 @layer base {
   body {
-    @apply text-sand-900 bg-sand-50;
-    -webkit-tap-highlight-color: transparent;
-  }
-  
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-semibold tracking-tight;
+    @apply bg-slate-50 text-gray-900 antialiased;
   }
 
-  input[type="search"]::-webkit-search-decoration,
-  input[type="search"]::-webkit-search-cancel-button,
-  input[type="search"]::-webkit-search-results-button,
-  input[type="search"]::-webkit-search-results-decoration {
-    @apply hidden;
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-medium tracking-tight;
   }
 }
 
 @layer components {
-  /* Primary Button */
+  /* Button Variants */
   .btn-primary {
-    @apply inline-flex items-center justify-center px-4 py-2.5
-           bg-primary-600 text-white font-medium
-           rounded-lg shadow-sm
-           hover:bg-primary-700 
-           active:bg-primary-800 active:scale-[0.98]
-           disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-primary-600
-           transition-all duration-200
-           focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2;
-  }
-
-  /* Secondary Button */
-  .btn-secondary {
-    @apply inline-flex items-center justify-center px-4 py-2.5
-           bg-white text-sand-700 font-medium
-           rounded-lg shadow-sm border border-sand-200
-           hover:bg-sand-50 hover:border-sand-300
-           active:bg-sand-100 active:scale-[0.98]
-           disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white
-           transition-all duration-200
-           focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2;
-  }
-
-  /* Text Button */
-  .btn-text {
-    @apply inline-flex items-center justify-center px-4 py-2.5
-           text-sand-600 font-medium
-           rounded-lg
-           hover:bg-sand-100 hover:text-sand-900
-           active:bg-sand-200 active:scale-[0.98]
+    @apply flex w-full justify-center rounded-md bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm 
+           hover:bg-blue-500 
+           focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 
            disabled:opacity-50 disabled:cursor-not-allowed
-           transition-all duration-200
-           focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2;
+           transition-colors duration-200;
   }
 
-  /* Small variant */
-  .btn-sm {
-    @apply px-3 py-1.5 text-sm;
+  .btn-secondary {
+    @apply flex justify-center rounded-md bg-white px-4 py-2.5 text-sm font-semibold text-gray-900 
+           shadow-sm ring-1 ring-inset ring-gray-300 
+           hover:bg-gray-50 
+           disabled:opacity-50 disabled:cursor-not-allowed
+           transition-colors duration-200;
   }
 
-  /* Large variant */
-  .btn-lg {
-    @apply px-6 py-3 text-lg;
+  .btn-danger {
+    @apply flex justify-center rounded-md bg-red-600 px-4 py-2.5 text-sm font-semibold text-white 
+           shadow-sm hover:bg-red-500 
+           focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 
+           disabled:opacity-50 disabled:cursor-not-allowed
+           transition-colors duration-200;
+  }
+
+  /* Form Controls */
+  .form-input {
+    @apply block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm 
+           ring-1 ring-inset ring-gray-300 
+           placeholder:text-gray-400 
+           focus:ring-2 focus:ring-inset focus:ring-blue-600 
+           disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200
+           sm:text-sm sm:leading-6;
+  }
+
+  .form-label {
+    @apply block text-sm font-medium leading-6 text-gray-900 mb-2;
+  }
+
+  .form-error {
+    @apply mt-2 text-sm text-red-600;
+  }
+
+  /* Card Styles */
+  .card {
+    @apply rounded-lg border border-gray-200 bg-white shadow-sm p-6;
+  }
+
+  .card-hover {
+    @apply hover:border-gray-300 transition-colors duration-200;
+  }
+
+  /* Container Layouts */
+  .container-sm {
+    @apply max-w-3xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .container-md {
+    @apply max-w-5xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .container-lg {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Badges */
+  .badge {
+    @apply inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ring-1 ring-inset;
+  }
+
+  .badge-gray {
+    @apply bg-gray-50 text-gray-600 ring-gray-500/10;
+  }
+
+  .badge-red {
+    @apply bg-red-50 text-red-700 ring-red-600/10;
+  }
+
+  .badge-green {
+    @apply bg-green-50 text-green-700 ring-green-600/10;
+  }
+
+  .badge-blue {
+    @apply bg-blue-50 text-blue-700 ring-blue-600/10;
+  }
+
+  /* Navigation */
+  .nav-link {
+    @apply text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200;
+  }
+
+  .nav-link-active {
+    @apply bg-gray-100 text-gray-900;
   }
 }
 
+/* Custom Scrollbar */
 @layer utilities {
-  .scrollbar-hide::-webkit-scrollbar {
+  .scrollbar-hidden {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .scrollbar-hidden::-webkit-scrollbar {
     display: none;
   }
 
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+  /* Glass effect */
+  .glass {
+    @apply bg-white bg-opacity-70 backdrop-blur-lg;
   }
 
-  /* Mobile Navigation Safe Areas */
-  .safe-top {
-    padding-top: max(env(safe-area-inset-top), 16px);
+  /* Gradients */
+  .gradient-blue {
+    @apply bg-gradient-to-r from-blue-600 to-indigo-600;
   }
 
-  .safe-bottom {
-    padding-bottom: max(env(safe-area-inset-bottom), 16px);
-  }
-
-  .pb-safe {
-    padding-bottom: calc(env(safe-area-inset-bottom) + 4rem);
-  }
-
-  /* Fix for devices with home indicator */
-  @supports(padding: max(0px)) {
-    .safe-bottom {
-      padding-bottom: max(env(safe-area-inset-bottom), 16px);
-    }
-    .pb-safe {
-      padding-bottom: calc(max(env(safe-area-inset-bottom), 16px) + 4rem);
-    }
+  .gradient-purple {
+    @apply bg-gradient-to-r from-purple-600 to-pink-600;
   }
 }

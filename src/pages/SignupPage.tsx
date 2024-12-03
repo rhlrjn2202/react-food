@@ -1,20 +1,15 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import AuthForm from '../components/AuthForm';
-import { SignupCredentials } from '../types/auth';
+import { SignupCredentials, LoginCredentials } from '../types/auth';
 import SEO from '../components/SEO';
 import { isMobile } from 'react-device-detect';
 
-export default function SignupPage() {
-  const { signup } = useAuth();
-  const [error, setError] = useState<string>();
-
-  const handleSignup = async (credentials: SignupCredentials) => {
-    try {
-      await signup(credentials);
-    } catch (error) {
-      setError('Failed to create account. Please try again.');
-    }
+const SignupPage = () => {
+  // Create a dummy handler for now since backend isn't implemented
+  const handleSignup = async (data: any) => {
+    console.log('Signup data:', data);
+    // Will implement actual signup logic later
   };
 
   return (
@@ -41,9 +36,8 @@ export default function SignupPage() {
           <div className={`mt-8 sm:mx-auto sm:w-full ${isMobile ? 'w-full' : 'sm:max-w-md'}`}>
             <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
               <AuthForm
-                mode="signup"
+                type="signup"
                 onSubmit={handleSignup}
-                error={error}
               />
             </div>
           </div>
@@ -52,3 +46,5 @@ export default function SignupPage() {
     </>
   );
 }
+
+export default SignupPage;

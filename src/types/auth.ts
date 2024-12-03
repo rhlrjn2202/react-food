@@ -12,18 +12,23 @@ export interface AuthState {
   isLoading: boolean;
 }
 
-export interface LoginCredentials {
-  identifier: string; // can be email or mobile
+// Base type for common fields
+export interface BaseCredentials {
   password: string;
 }
 
-export interface SignupCredentials {
+export interface LoginCredentials extends BaseCredentials {
+  identifier: string;
+}
+
+export interface SignupCredentials extends BaseCredentials {
   name: string;
   email: string;
-  mobile: string; // Indian mobile number
-  password: string;
+  mobile: string;
   confirmPassword: string;
 }
+
+export type AuthFormData = LoginCredentials | SignupCredentials;
 
 export interface AuthResponse {
   user: User;

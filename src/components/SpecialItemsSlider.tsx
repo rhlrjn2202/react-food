@@ -3,7 +3,6 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { MenuItem as MenuItemType } from '../types';
 import MenuItem from './MenuItem';
 import { isMobile } from 'react-device-detect';
-import { Link } from 'react-router-dom';
 
 interface SpecialItemsSliderProps {
   items: MenuItemType[];
@@ -36,8 +35,9 @@ export default function SpecialItemsSlider({ items, onAddToCart }: SpecialItemsS
   const scrollToIndex = (index: number) => {
     if (scrollContainerRef.current) {
       const container = scrollContainerRef.current;
-      const itemWidth = container.clientWidth / (isMobile ? 1 : 3);
-      const scrollPosition = index * itemWidth;
+      if (!container) return;
+      const _itemWidth = container.clientWidth / (isMobile ? 1 : 3);
+      const scrollPosition = index * _itemWidth;
       container.scrollTo({
         left: scrollPosition,
         behavior: 'smooth'
@@ -48,7 +48,7 @@ export default function SpecialItemsSlider({ items, onAddToCart }: SpecialItemsS
   const scroll = (direction: 'left' | 'right') => {
     if (scrollContainerRef.current) {
       const container = scrollContainerRef.current;
-      const itemWidth = container.clientWidth / (isMobile ? 1 : 3);
+      if (!container) return;
       const nextIndex = direction === 'left' 
         ? Math.max(0, currentIndex - 1)
         : Math.min(items.length - 1, currentIndex + 1);

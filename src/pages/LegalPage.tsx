@@ -43,7 +43,7 @@ export default function LegalPage({ title, description, children }: LegalPagePro
           <div className="bg-white rounded-xl shadow-sm p-6 sm:p-8">
             <div className="legal-content">
               {/* Custom styling for legal content */}
-              <style jsx>{`
+              <style>{`
                 .legal-content {
                   @apply text-sand-700 leading-relaxed;
                 }

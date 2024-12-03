@@ -16,7 +16,6 @@ export default function CategorySection({ category, items, onAddToCart }: Catego
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
-  const [showGradient, setShowGradient] = useState(true);
   const itemsPerView = isMobile ? 2 : 3;
 
   // Only auto-slide for Special category
@@ -125,12 +124,8 @@ export default function CategorySection({ category, items, onAddToCart }: Catego
         )}
 
         {/* Gradient Fade Effect */}
-        {showGradient && (
-          <>
-            <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-sand-50 to-transparent z-10 pointer-events-none" />
-            <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-sand-50 to-transparent z-10 pointer-events-none" />
-          </>
-        )}
+        <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-sand-50 to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-sand-50 to-transparent z-10 pointer-events-none" />
 
         {/* Items Slider */}
         <div

@@ -4,7 +4,7 @@ import MobileHeroSlider from './MobileHeroSlider';
 import CategoryGrid from './CategoryGrid';
 import HotDeals from './HotDeals';
 import CategorySection from './CategorySection';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { menuItems } from '../data/menuItems';
 import { categories } from '../data/categories';
 
